@@ -1,0 +1,89 @@
+{% extends "top100/layout.html" %}
+
+{% block body %}
+
+{% if message %}
+<h3>{{message}}</h3>
+{% endif %}
+
+{% for album in albums %}
+
+<div>
+
+    <div class="container">
+        <div class="row">
+          <div class="col-md-auto">
+            {% if album.image_url != "None" %}
+    <img src = "{{album.image_url}}">
+    {% else %}
+    <img src = "https://www.google.com/imgres?imgurl=https%3A%2F%2Flightwidget.com%2Fwp-content%2Fuploads%2Flocal-file-not-found.png&imgrefurl=https%3A%2F%2Flightwidget.com%2Ffile-not-found-error-on-local&tbnid=d8JUAyMiV3FWkM&vet=12ahUKEwjs68rbt6XuAhXIg-AKHdCLA7oQMygCegUIARCqAQ..i&docid=dR0eSLrqd8WneM&w=623&h=634&q=image%20not%20found&ved=2ahUKEwjs68rbt6XuAhXIg-AKHdCLA7oQMygCegUIARCqAQ">
+    {% endif %}
+          </div>
+          <div class="col-md-auto">
+            {% if album.album != "None" %}
+        {% if album.album_link != "None" %}
+        <h4><a href="{{album.album_link}}">{{album.rank}}. {{album.album}}</a></h4>
+        {% else %}
+        <h4>{{album.rank}}. {{album.album}}</h4>
+        {% endif %}
+    {% else %}
+    <h4>{{album.rank}}. No Title Was Provided For This Album</h4>
+    {% endif %}
+
+    {% if album.artist != "None" %}
+        {% if album.artist_link != "None" %}
+        <h5><a href="{{album.artist_link}}">By: {{album.artist}}</a></h5>
+        {% else %}
+        <h5>By: {{album.artist}}</h5>
+        {% endif %}
+    {% else %}
+    <h5>No Artist Was Provided For This Album</h5>
+    {% endif %}
+          </div>
+        </div>
+
+
+
+
+        <div class="row">
+            <div class="col-md-auto">
+                <input class="btn btn-primary" id="reveal_{{album.rank}}" onclick="reveal('details_{{album.rank}}', 'reveal_{{album.rank}}')" value="More Details">
+            </div>
+            <div class="col-md-auto">
+                <div class="hide" id="details_{{album.rank}}">
+                    {% if album.category != "None" %}
+                    {% if album.category_link != "None" %}
+                    <h6><a href="{{album.category_link}}">Genre: {{album.category}}</a></h6>
+                    {% else %}
+                    <h6>Genre: {{album.category}}</h6>
+                    {% endif %}
+                {% endif %}
+                
+                {% if album.song_count != "None" %}
+                    <h6>{{album.song_count}} Songs</h6>
+                {% endif %}
+            
+                {% if album.price != "None" %}
+                    <h6>{{album.price}} on iTunes</h6>
+                {% endif %}
+            
+                {% if album.release_date != "None" %}
+                    <h6>Release Date: {{album.release_date}}</h6>
+                {% endif %}
+                </div>
+            </div>
+          </div>
+      </div>
+
+</div>
+<br>
+
+{% endfor %}
+
+{% endblock %}
+
+{% block script %}
+    
+    
+{% endblock script %}
+    
