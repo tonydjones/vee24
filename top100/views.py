@@ -88,8 +88,12 @@ def index(request):
         refresh(request)
 
     albums = Song.objects.all()
+    ranks = []
+    for album in albums:
+        ranks.append(album.rank)
     return render(request, "top100/index.html", {
-        "albums" : albums
+        "albums" : albums,
+        "ranks" : json.dumps(ranks)
     })
 
 def search(request):
@@ -107,7 +111,6 @@ def search(request):
 
     albums = Song.objects.all()
     search_terms = request.GET['search_terms'].lower()
-    print(search_terms)
     filtered_albums = []
     for album in albums:
         if search_terms in album.album.lower():
@@ -116,7 +119,12 @@ def search(request):
             filtered_albums.append(album)
         elif search_terms == album.rank:
             filtered_albums.append(album)
+
+    ranks = []
+    for album in filtered_albums:
+        ranks.append(album.rank)
     return render(request, "top100/index.html", {
         "albums" : filtered_albums,
-        "message" : "Search results for '" + request.GET['search_terms'] + "'"
+        "ranks" : json.dumps(ranks),
+        "message" : str(len(ranks)) + " search results for '" + request.GET['search_terms'] + "'"
     })

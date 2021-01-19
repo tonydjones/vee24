@@ -6,9 +6,21 @@
 <h3>{{message}}</h3>
 {% endif %}
 
+<div id="buttons" class="row">
+    <div class="col-md-auto">
+        <button class="btn btn-sm btn-outline-primary previous" disabled="True" onclick="previous()">Previous</button>
+    </div>
+    <div class="col-md-auto">
+        <p class="page">Page 1</p>
+    </div>
+    <div class="col-md-auto">
+        <button class="btn btn-sm btn-outline-primary next" onclick="next()">Next</button>
+    </div>
+</div>
+
 {% for album in albums %}
 
-<div>
+<div id="rank_{{album.rank}}" class="hide">
 
     <div class="container">
         <div class="row">
@@ -19,7 +31,7 @@
     <img src = "https://www.google.com/imgres?imgurl=https%3A%2F%2Flightwidget.com%2Fwp-content%2Fuploads%2Flocal-file-not-found.png&imgrefurl=https%3A%2F%2Flightwidget.com%2Ffile-not-found-error-on-local&tbnid=d8JUAyMiV3FWkM&vet=12ahUKEwjs68rbt6XuAhXIg-AKHdCLA7oQMygCegUIARCqAQ..i&docid=dR0eSLrqd8WneM&w=623&h=634&q=image%20not%20found&ved=2ahUKEwjs68rbt6XuAhXIg-AKHdCLA7oQMygCegUIARCqAQ">
     {% endif %}
           </div>
-          <div class="col-md-auto">
+          <div class="col">
             {% if album.album != "None" %}
         {% if album.album_link != "None" %}
         <h4><a href="{{album.album_link}}">{{album.rank}}. {{album.album}}</a></h4>
@@ -49,7 +61,7 @@
             <div class="col-md-auto">
                 <input class="btn btn-primary" id="reveal_{{album.rank}}" onclick="reveal('details_{{album.rank}}', 'reveal_{{album.rank}}')" value="More Details">
             </div>
-            <div class="col-md-auto">
+            <div class="col">
                 <div class="hide" id="details_{{album.rank}}">
                     {% if album.category != "None" %}
                     {% if album.category_link != "None" %}
@@ -74,16 +86,118 @@
             </div>
           </div>
       </div>
-
-</div>
 <br>
+</div>
 
 {% endfor %}
+
+<div id="buttons" class="row">
+    <div class="col-md-auto">
+        <button class="btn btn-sm btn-outline-primary previous" disabled="True" onclick="previous()">Previous</button>
+    </div>
+    <div class="col-md-auto">
+        <p class="page">Page 1</p>
+    </div>
+    <div class="col-md-auto">
+        <button class="btn btn-sm btn-outline-primary next" onclick="next()">Next</button>
+    </div>
+    
+    
+    
+</div>
 
 {% endblock %}
 
 {% block script %}
-    
-    
+    <script>
+        var page;
+        var rank_list;
+        document.addEventListener('DOMContentLoaded', function() {
+            page = 1;
+            var rank_json = "{{ranks}}";
+            rank_list = JSON.parse(rank_json);
+            document.querySelectorAll('.page').forEach(function(element){
+                      element.innerHTML = `Page ${page}`;
+                  })
+            reveal_albums();
+        });
+
+        function reveal_albums() {
+            var i;
+            var finish = 10;
+            if (finish >= rank_list.length){
+                finish = rank_list.length;
+                  document.querySelectorAll('.next').forEach(function(element){
+                      element.disabled = true;
+                  })
+            }
+            for (i=0; i < finish; i++){
+                document.querySelector(`#rank_${rank_list[i]}`).style.display = 'block';
+            }
+        }
+
+        function next() {
+
+            document.querySelectorAll('.previous').forEach(function(element){
+                      element.disabled = false;
+                  })
+
+            var start = page * 10;
+
+            var finish = start + 10;
+
+            page++;
+
+            var i;
+
+            for (i=start-10; i < start; i++){
+                document.querySelector(`#rank_${rank_list[i]}`).style.display = 'none';
+            }
+
+              if (finish >= rank_list.length) {
+                  finish = rank_list.length;
+                  document.querySelectorAll('.next').forEach(function(element){
+                      element.disabled = true;
+                  })
+              }
+              for (i=start; i < finish; i++){
+                document.querySelector(`#rank_${rank_list[i]}`).style.display = 'block';
+            }
+            document.querySelectorAll('.page').forEach(function(element){
+                      element.innerHTML = `Page ${page}`;
+                  })
+        }
+
+        function previous() {
+
+            document.querySelectorAll('.next').forEach(function(element){
+                      element.disabled = false;
+                  })
+
+            var start = (page - 2) * 10;
+
+            var finish = start + 10;
+
+            page--;
+
+            var i;
+
+            for (i=finish; i < finish + 10; i++){
+                document.querySelector(`#rank_${rank_list[i]}`).style.display = 'none';
+            }
+
+              if (start === 0) {
+                document.querySelectorAll('.previous').forEach(function(element){
+                      element.disabled = true;
+                  })
+              }
+              for (i=start; i < finish; i++){
+                document.querySelector(`#rank_${rank_list[i]}`).style.display = 'block';
+            }
+            document.querySelectorAll('.page').forEach(function(element){
+                      element.innerHTML = `Page ${page}`;
+                  })
+}
+    </script>
 {% endblock script %}
     

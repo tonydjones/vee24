@@ -9,7 +9,8 @@ function reveal(div_id, btn_id) {
   }
 }
 
-function reveal_search(div_id, btn_id) {
-  document.querySelector(`#${div_id}`).style.display = 'block';
+function reveal_search(form_id, submit_id, btn_id) {
+  document.querySelector(`#${form_id}`).style.display = 'block';
+  document.querySelector(`#${submit_id}`).style.display = 'block';
   document.querySelector(`#${btn_id}`).style.display = 'none';
 }
