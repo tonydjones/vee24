@@ -117,9 +117,11 @@ def search(request):
             filtered_albums.append(album)
         elif search_terms in album.artist.lower():
             filtered_albums.append(album)
+        elif search_terms in album.category.lower():
+            filtered_albums.append(album)
         elif search_terms == album.rank:
             filtered_albums.append(album)
-
+        
     ranks = []
     for album in filtered_albums:
         ranks.append(album.rank)
